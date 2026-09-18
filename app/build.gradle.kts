@@ -30,8 +30,16 @@ android {
 
     signingConfigs {
         create("release") {
-            // Populated by CI / local.properties in a real release pipeline.
-            // Intentionally left unconfigured in source control.
+            // Populated from environment variables by CI (or a local export) so no
+            // keystore or credential ever lives in source control. A release build
+            // run without these set simply produces an unsigned APK.
+            val storeFilePath = System.getenv("VELORA_RELEASE_STORE_FILE")
+            if (storeFilePath != null && file(storeFilePath).exists()) {
+                storeFile = file(storeFilePath)
+                storePassword = System.getenv("VELORA_RELEASE_STORE_PASSWORD")
+                keyAlias = System.getenv("VELORA_RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("VELORA_RELEASE_KEY_PASSWORD")
+            }
         }
     }
 
@@ -43,6 +51,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isMinifyEnabled = false
