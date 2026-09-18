@@ -5,7 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
-import com.velora.vault.core.design.VeloraTheme
 import com.velora.vault.core.navigation.VeloraApp
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,9 +23,7 @@ class MainActivity : FragmentActivity() {
         val startAction = intent?.action
 
         setContent {
-            VeloraTheme {
-                VeloraApp(launchAction = startAction)
-            }
+            VeloraApp(launchAction = startAction)
         }
     }
 }

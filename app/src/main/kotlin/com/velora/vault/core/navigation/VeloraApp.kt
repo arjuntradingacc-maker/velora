@@ -1,5 +1,6 @@
 package com.velora.vault.core.navigation
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,10 +17,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.velora.vault.core.design.VeloraTheme
 import com.velora.vault.core.design.components.RadialAddMenu
 import com.velora.vault.core.design.components.VeloraBottomBar
 import com.velora.vault.core.design.components.VeloraBottomNavTabs
 import com.velora.vault.core.design.components.defaultRadialActions
+import com.velora.vault.data.repository.AppTheme
 
 /** Top-level tab routes that show the bottom navigation bar. */
 private val bottomBarRoutes = VeloraBottomNavTabs.map { it.route }.toSet()
@@ -28,6 +31,21 @@ private val bottomBarRoutes = VeloraBottomNavTabs.map { it.route }.toSet()
 fun VeloraApp(launchAction: String? = null) {
     val rootViewModel: AppRootViewModel = hiltViewModel()
     val rootState by rootViewModel.state.collectAsState()
+    val themePreference by rootViewModel.themePreference.collectAsState()
+    val systemDark = isSystemInDarkTheme()
+    val darkTheme = when (themePreference) {
+        AppTheme.LIGHT -> false
+        AppTheme.DARK -> true
+        AppTheme.SYSTEM -> systemDark
+    }
+
+    VeloraTheme(darkTheme = darkTheme) {
+        VeloraAppContent(launchAction = launchAction, rootState = rootState)
+    }
+}
+
+@Composable
+private fun VeloraAppContent(launchAction: String?, rootState: AppRootState) {
     val navController = rememberNavController()
 
     val backStackEntry by navController.currentBackStackEntryAsState()

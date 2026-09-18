@@ -188,10 +188,12 @@ fun BiometricSetupScreen(onDone: () -> Unit, viewModel: BiometricSetupViewModel 
             VeloraPrimaryButton(
                 text = "Enable biometric unlock",
                 onClick = {
-                    (context as? FragmentActivity)?.let { activity ->
-                        biometricManager.authenticate(activity, title = "Confirm it's you") { result ->
-                            if (result is BiometricResult.Success) {
-                                viewModel.enableBiometric()
+                    val activity = context as? FragmentActivity
+                    val cipher = viewModel.enrollmentCipher()
+                    if (activity != null && cipher != null) {
+                        biometricManager.authenticate(activity, title = "Confirm it's you", cipher = cipher) { result ->
+                            if (result is BiometricResult.Success && result.cipher != null) {
+                                viewModel.completeEnrollment(result.cipher)
                                 onDone()
                             }
                         }

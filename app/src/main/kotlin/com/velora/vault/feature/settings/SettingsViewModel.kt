@@ -46,7 +46,8 @@ class SettingsViewModel @Inject constructor(
     fun setAnalyticsEnabled(enabled: Boolean) = viewModelScope.launch { settingsRepository.setAnalyticsEnabled(enabled) }
     fun setSearchBiometricGateEnabled(enabled: Boolean) = viewModelScope.launch { settingsRepository.setSearchBiometricGateEnabled(enabled) }
 
-    fun enableBiometric() = authRepository.enableBiometric()
+    fun biometricEnrollmentCipher(): javax.crypto.Cipher? = authRepository.biometricEnrollmentCipher()
+    fun completeBiometricEnrollment(cipher: javax.crypto.Cipher): Boolean = authRepository.completeBiometricEnrollment(cipher)
     fun disableBiometric() = authRepository.disableBiometric()
     fun setupPin(pin: String) = authRepository.setupPin(pin)
     fun disablePin() = authRepository.disablePin()

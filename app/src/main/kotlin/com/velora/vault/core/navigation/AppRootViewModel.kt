@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.velora.vault.core.security.VaultSession
 import com.velora.vault.core.security.VaultSessionManager
+import com.velora.vault.data.repository.AppTheme
 import com.velora.vault.data.repository.AuthRepository
+import com.velora.vault.data.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +26,7 @@ sealed interface AppRootState {
 class AppRootViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     sessionManager: VaultSessionManager,
+    settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     val state: StateFlow<AppRootState> = sessionManager.session.map { session ->
@@ -34,4 +37,9 @@ class AppRootViewModel @Inject constructor(
             else -> AppRootState.Ready
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, AppRootState.Loading)
+
+    /** Drives [com.velora.vault.core.design.VeloraTheme] — the one place the persisted Appearance choice actually takes effect. */
+    val themePreference: StateFlow<AppTheme> = settingsRepository.settings
+        .map { it.theme }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, AppTheme.SYSTEM)
 }

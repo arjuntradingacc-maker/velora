@@ -55,11 +55,12 @@ fun SettingsSecurityScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hi
                     checked = biometricEnabled,
                     onCheckedChange = { enabled ->
                         if (enabled) {
-                            (context as? FragmentActivity)?.let { activity ->
-                                biometricManager.authenticate(activity, title = "Confirm it's you") { result ->
-                                    if (result is BiometricResult.Success) {
-                                        viewModel.enableBiometric()
-                                        biometricEnabled = true
+                            val activity = context as? FragmentActivity
+                            val cipher = viewModel.biometricEnrollmentCipher()
+                            if (activity != null && cipher != null) {
+                                biometricManager.authenticate(activity, title = "Confirm it's you", cipher = cipher) { result ->
+                                    if (result is BiometricResult.Success && result.cipher != null) {
+                                        biometricEnabled = viewModel.completeBiometricEnrollment(result.cipher)
                                     }
                                 }
                             }

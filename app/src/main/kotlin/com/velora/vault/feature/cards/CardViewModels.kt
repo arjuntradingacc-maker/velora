@@ -3,6 +3,7 @@ package com.velora.vault.feature.cards
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.velora.vault.core.util.ScannedCardDetails
 import com.velora.vault.data.local.entity.CardNetwork
 import com.velora.vault.data.local.entity.PaymentCardEntity
 import com.velora.vault.data.repository.VaultRepository
@@ -69,6 +70,17 @@ class AddEditCardViewModel @Inject constructor(
     }
 
     fun update(block: (AddEditCardState) -> AddEditCardState) { _state.value = block(_state.value) }
+
+    /** Fills in whatever the camera scan found; a field the scan couldn't read is left as the user typed it. */
+    fun applyScan(details: ScannedCardDetails) {
+        _state.value = _state.value.copy(
+            fullNumber = details.number ?: _state.value.fullNumber,
+            expiryMonth = details.expiryMonth?.toString() ?: _state.value.expiryMonth,
+            expiryYear = details.expiryYear?.toString() ?: _state.value.expiryYear,
+            cardholderName = details.cardholderName ?: _state.value.cardholderName,
+            network = details.network ?: _state.value.network,
+        )
+    }
 
     fun save(onDone: () -> Unit) {
         val s = _state.value

@@ -87,18 +87,31 @@ class VaultKeyManager @Inject constructor(
     }
 
     // --- Biometric unlock -------------------------------------------------
-    // The Keystore key itself is authentication-gated, so encryption here
-    // does not require a fresh prompt, but decryption (unlockingpath) does —
-    // BiometricAuthManager supplies the pre-authenticated Cipher.
+    // The Keystore key is authentication-gated per-operation (validity = 0),
+    // which means EVERY use of it — including the very first encryption when
+    // the user turns biometric unlock on — must be tied to a successful
+    // BiometricPrompt.CryptoObject authentication for that exact Cipher
+    // instance. There is no "authenticate once, then use the key freely"
+    // shortcut for a symmetric key configured this way; calling doFinal() on
+    // a cipher that was never carried through a CryptoObject prompt throws
+    // UserNotAuthenticatedException. So enrollment is a two-step handshake,
+    // mirroring the unlock path exactly: build the cipher, hand it to the
+    // biometric prompt, then only use the cipher the prompt hands back.
 
     fun isBiometricEnabled(): Boolean = prefs.getBoolean(SecureVaultPrefs.Keys.BIOMETRIC_ENABLED, false)
 
-    fun wrapVaultKeyForBiometric(vaultKey: ByteArray) {
-        val cipher = keystoreCrypto.createAuthenticatedEncryptCipher(KeystoreCryptoManager.ALIAS_VAULT_KEY_WRAP)
-        val ciphertext = cipher.doFinal(vaultKey)
-        prefs.putString(SecureVaultPrefs.Keys.WRAPPED_VAULT_KEY_BIOMETRIC, ciphertext.toBase64())
-        prefs.putString(SecureVaultPrefs.Keys.WRAPPED_VAULT_KEY_BIOMETRIC_IV, cipher.iv.toBase64())
-        prefs.putBoolean(SecureVaultPrefs.Keys.BIOMETRIC_ENABLED, true)
+    /** Step 1 of enabling biometric unlock: an unauthenticated cipher to pass into a [androidx.biometric.BiometricPrompt.CryptoObject]. */
+    fun biometricEnrollmentCipher(): Cipher? =
+        runCatching { keystoreCrypto.createAuthenticatedEncryptCipher(KeystoreCryptoManager.ALIAS_VAULT_KEY_WRAP) }.getOrNull()
+
+    /** Step 2: call only with the cipher [androidx.biometric.BiometricPrompt.AuthenticationResult] handed back after success. */
+    fun wrapVaultKeyForBiometric(vaultKey: ByteArray, authenticatedCipher: Cipher): Boolean {
+        return runCatching {
+            val ciphertext = authenticatedCipher.doFinal(vaultKey)
+            prefs.putString(SecureVaultPrefs.Keys.WRAPPED_VAULT_KEY_BIOMETRIC, ciphertext.toBase64())
+            prefs.putString(SecureVaultPrefs.Keys.WRAPPED_VAULT_KEY_BIOMETRIC_IV, authenticatedCipher.iv.toBase64())
+            prefs.putBoolean(SecureVaultPrefs.Keys.BIOMETRIC_ENABLED, true)
+        }.isSuccess
     }
 
     fun biometricUnlockCipher(): Cipher? {

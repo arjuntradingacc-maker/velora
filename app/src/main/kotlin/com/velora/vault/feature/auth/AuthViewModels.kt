@@ -30,7 +30,8 @@ class MasterPasswordViewModel @Inject constructor(private val authRepository: Au
 
 @HiltViewModel
 class BiometricSetupViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
-    fun enableBiometric() = authRepository.enableBiometric()
+    fun enrollmentCipher(): Cipher? = authRepository.biometricEnrollmentCipher()
+    fun completeEnrollment(cipher: Cipher): Boolean = authRepository.completeBiometricEnrollment(cipher)
 }
 
 @HiltViewModel

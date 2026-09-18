@@ -1,5 +1,10 @@
 package com.velora.vault.feature.cards
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +25,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,8 +38,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.velora.vault.core.design.Velora
 import com.velora.vault.core.design.VeloraSpacing
 import com.velora.vault.core.design.VeloraType
@@ -41,10 +51,12 @@ import com.velora.vault.core.design.components.CopyRow
 import com.velora.vault.core.design.components.VeloraDetailTopBar
 import com.velora.vault.core.design.components.VeloraIconButton
 import com.velora.vault.core.design.components.VeloraPrimaryButton
+import com.velora.vault.core.design.components.VeloraSecondaryButton
 import com.velora.vault.core.design.components.VeloraTextField
 import com.velora.vault.core.security.BiometricAuthManager
 import com.velora.vault.core.security.BiometricResult
 import com.velora.vault.core.security.ScreenshotProtected
+import com.velora.vault.core.util.CardOcrParser
 import com.velora.vault.data.local.entity.PaymentCardEntity
 
 @Composable
@@ -165,12 +177,75 @@ fun AddEditCardScreen(
     viewModel: AddEditCardViewModel = hiltViewModel(),
 ) {
     val colors = Velora.colors
+    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     LaunchedEffect(cardId) { viewModel.load(cardId) }
+
+    val recognizer = remember { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
+    DisposableEffect(Unit) { onDispose { recognizer.close() } }
+    var scanError by remember { mutableStateOf<String?>(null) }
+    var scanning by remember { mutableStateOf(false) }
+
+    val captureLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+        if (bitmap == null) {
+            scanning = false
+            return@rememberLauncherForActivityResult
+        }
+        recognizer.process(InputImage.fromBitmap(bitmap, 0))
+            .addOnSuccessListener { visionText ->
+                scanning = false
+                val lines = visionText.textBlocks.flatMap { it.lines }.map { it.text }
+                val details = CardOcrParser.parse(lines)
+                if (details.number == null && details.expiryMonth == null && details.cardholderName == null) {
+                    scanError = "Couldn't read that card. Try better lighting and a flatter angle."
+                } else {
+                    viewModel.applyScan(details)
+                }
+            }
+            .addOnFailureListener {
+                scanning = false
+                scanError = "Couldn't read that card. Try again."
+            }
+    }
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) {
+            scanning = true
+            scanError = null
+            captureLauncher.launch(null)
+        } else {
+            scanError = "Camera permission is needed to scan a card."
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize().background(colors.background).systemBarsPadding().verticalScroll(rememberScrollState())) {
         VeloraDetailTopBar(title = if (cardId == null) "Add card" else "Edit card", onBack = onBack)
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = VeloraSpacing.xl)) {
+            VeloraSecondaryButton(
+                text = if (scanning) "Scanning…" else "Scan card with camera",
+                enabled = !scanning,
+                onClick = {
+                    val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                    if (granted) {
+                        scanning = true
+                        scanError = null
+                        captureLauncher.launch(null)
+                    } else {
+                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().padding(bottom = VeloraSpacing.xs),
+            )
+            scanError?.let {
+                Text(it, style = VeloraType.bodySmall, color = colors.critical, modifier = Modifier.padding(bottom = VeloraSpacing.md))
+            }
+            if (scanError == null) {
+                Text(
+                    "The CVV never gets scanned — enter it yourself once the rest is filled in.",
+                    style = VeloraType.bodySmall,
+                    color = colors.textSecondary,
+                    modifier = Modifier.padding(bottom = VeloraSpacing.md),
+                )
+            }
             VeloraTextField(state.nickname, { v -> viewModel.update { it.copy(nickname = v) } }, "Card nickname", modifier = Modifier.padding(bottom = VeloraSpacing.md))
             VeloraTextField(state.cardholderName, { v -> viewModel.update { it.copy(cardholderName = v) } }, "Cardholder name", modifier = Modifier.padding(bottom = VeloraSpacing.md))
             VeloraTextField(

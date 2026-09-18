@@ -78,9 +78,14 @@ class AuthRepository @Inject constructor(
     fun disablePin() = vaultKeyManager.disablePin()
 
     fun isBiometricEnabled(): Boolean = vaultKeyManager.isBiometricEnabled()
-    fun enableBiometric() {
-        val vaultKey = sessionManager.currentVaultKeyOrNull() ?: return
-        vaultKeyManager.wrapVaultKeyForBiometric(vaultKey)
+
+    /** Step 1: get a cipher to show the user a biometric prompt with. Null means the device can't set this key up right now. */
+    fun biometricEnrollmentCipher(): Cipher? = vaultKeyManager.biometricEnrollmentCipher()
+
+    /** Step 2: call with the cipher the biometric prompt handed back on success, never a cipher you built yourself. */
+    fun completeBiometricEnrollment(authenticatedCipher: Cipher): Boolean {
+        val vaultKey = sessionManager.currentVaultKeyOrNull() ?: return false
+        return vaultKeyManager.wrapVaultKeyForBiometric(vaultKey, authenticatedCipher)
     }
     fun disableBiometric() = vaultKeyManager.disableBiometric()
     fun biometricUnlockCipher(): Cipher? = vaultKeyManager.biometricUnlockCipher()
