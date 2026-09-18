@@ -10,7 +10,12 @@
         <item name="postSplashScreenTheme">@style/Theme.Velora.Main</item>
     </style>
 
-    <style name="Theme.Velora.Main" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Parented to a plain framework theme, not a Material Components style: Compose
+         Material3 (androidx.compose.material3) ships no XML style resources at all — those
+         only exist in the separate, unused com.google.android.material:material library.
+         This theme is replaced by VeloraTheme (Compose) the instant setContent() runs, so a
+         framework base is all it needs. -->
+    <style name="Theme.Velora.Main" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/brand_ink</item>
         <item name="android:statusBarColor" tools:targetApi="21">@android:color/transparent</item>
         <item name="android:navigationBarColor" tools:targetApi="21">@android:color/transparent</item>
