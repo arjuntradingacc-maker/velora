@@ -111,12 +111,21 @@ API keys, recovery codes, custom items, and the full settings surface
 
 ## Building
 
-This was built in a sandbox without the Android SDK installed, so it has
-not been compiled here. It's a standard Gradle/AGP/Compose project — open
-it in Android Studio (Koala+) or run:
+This has been built and verified end-to-end: a full `./gradlew assembleRelease`
+(Android SDK 35 / build-tools 35.0.0, AGP 8.6.1) completes cleanly — R8
+minification, resource shrinking, and APK signing all succeed, and the
+resulting APK passes `apksigner verify` and `aapt2 dump badging`. It has
+not been installed on a device or emulator (this environment has neither),
+so runtime behavior is unverified beyond what a successful build implies.
+
+It's a standard Gradle/AGP/Compose project — open it in Android Studio
+(Koala+) or run:
 
 ```
-./gradlew assembleDebug
+./gradlew assembleDebug     # unsigned debug build
+./gradlew assembleRelease   # minified/shrunk; needs a signing keystore —
+                             # see VELORA_RELEASE_STORE_FILE and friends in
+                             # app/build.gradle.kts's signingConfigs block
 ```
 
 `minSdk` is 26 (required for the Autofill Framework and modern Keystore
