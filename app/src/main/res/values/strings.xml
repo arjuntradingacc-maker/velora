@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Velora</string>
+
+    <string name="shortcut_add_password_short">Add password</string>
+    <string name="shortcut_add_password_long">Add a new password</string>
+    <string name="shortcut_generate_short">Generate</string>
+    <string name="shortcut_generate_long">Generate password</string>
+    <string name="shortcut_open_vault_short">Open vault</string>
+    <string name="shortcut_open_vault_long">Open your vault</string>
+    <string name="shortcut_search_short">Search</string>
+    <string name="shortcut_search_long">Search vault</string>
+
+    <string name="widget_vault_shortcut_label">Velora Vault</string>
+    <string name="widget_vault_shortcut_description">Jump straight into your vault</string>
+    <string name="widget_generator_label">Velora Generator</string>
+    <string name="widget_generator_description">Generate a strong password from your home screen</string>
+    <string name="widget_security_status_label">Velora Security Status</string>
+    <string name="widget_security_status_description">See your vault\'s security score at a glance</string>
+</resources>

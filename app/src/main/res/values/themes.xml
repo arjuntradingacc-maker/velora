@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Transient theme shown only for the duration of the system splash
+         screen. All real theming (colors, typography, motion) lives in
+         Compose — see core/design/Theme.kt. -->
+    <style name="Theme.Velora.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_velora_mark</item>
+        <item name="postSplashScreenTheme">@style/Theme.Velora.Main</item>
+    </style>
+
+    <style name="Theme.Velora.Main" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/brand_ink</item>
+        <item name="android:statusBarColor" tools:targetApi="21">@android:color/transparent</item>
+        <item name="android:navigationBarColor" tools:targetApi="21">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+    </style>
+
+</resources>
