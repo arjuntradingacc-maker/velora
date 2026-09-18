@@ -124,6 +124,7 @@ fun SettingsSecurityScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hi
     }
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 private fun PinSetupSheet(onDismiss: () -> Unit, onSet: (String) -> Unit) {
     var pin by remember { mutableStateOf("") }

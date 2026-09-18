@@ -1,6 +1,7 @@
 package com.velora.vault.widget
 
 import android.content.Context
+import android.content.Intent
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.action.clickable
@@ -40,7 +41,7 @@ class SecurityStatusWidget : GlanceAppWidget() {
                     .fillMaxSize()
                     .background(ColorProvider(VeloraPalette.SurfaceDark1))
                     .padding(16.dp)
-                    .clickable(actionStartActivity<MainActivity>()),
+                    .clickable(actionStartActivity(Intent(context, MainActivity::class.java))),
                 verticalAlignment = Alignment.Vertical.CenterVertically,
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
             ) {

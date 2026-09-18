@@ -1,6 +1,7 @@
 package com.velora.vault.feature.generator
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -157,7 +158,7 @@ private fun ModeSwitch(mode: GeneratorMode, onModeChange: (GeneratorMode) -> Uni
 @Composable
 private fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier {
     val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
-    return this.then(androidx.compose.foundation.clickable(interactionSource = interaction, indication = null, onClick = onClick))
+    return this.clickable(interactionSource = interaction, indication = null, onClick = onClick)
 }
 
 /** The generator's signature reveal: characters scramble left-to-right before settling on the real value. */

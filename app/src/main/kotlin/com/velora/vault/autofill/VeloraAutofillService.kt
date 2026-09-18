@@ -138,13 +138,13 @@ class VeloraAutofillService : AutofillService() {
         }
     }
 
-    private inline fun findValues(structure: android.app.assist.AssistStructure, action: (AutofillId, String?) -> Unit) {
+    private fun findValues(structure: android.app.assist.AssistStructure, action: (AutofillId, String?) -> Unit) {
         for (i in 0 until structure.windowNodeCount) {
             visit(structure.getWindowNodeAt(i).rootViewNode, action)
         }
     }
 
-    private inline fun visit(node: android.app.assist.AssistStructure.ViewNode, action: (AutofillId, String?) -> Unit) {
+    private fun visit(node: android.app.assist.AssistStructure.ViewNode, action: (AutofillId, String?) -> Unit) {
         node.autofillId?.let { id -> action(id, node.autofillValue?.let { if (it.isText) it.textValue?.toString() else null }) }
         for (i in 0 until node.childCount) visit(node.getChildAt(i), action)
     }

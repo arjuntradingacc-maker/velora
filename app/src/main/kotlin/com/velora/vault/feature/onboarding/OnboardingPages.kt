@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -150,7 +151,7 @@ internal fun ItemsFlowingPage() {
 }
 
 private fun Modifier.graphicsOffset(x: androidx.compose.ui.unit.Dp, y: androidx.compose.ui.unit.Dp): Modifier =
-    this.then(androidx.compose.foundation.layout.offset(x = x, y = y))
+    this.offset(x = x, y = y)
 
 @Composable
 internal fun BiometricPage() {

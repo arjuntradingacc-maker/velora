@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -202,9 +203,7 @@ private fun UnlockVaultGlyph(unlocking: Boolean) {
     }
 }
 
-private fun Modifier.graphicsLayerScale(scale: Float): Modifier = this.then(
-    androidx.compose.ui.draw.scale(scale),
-)
+private fun Modifier.graphicsLayerScale(scale: Float): Modifier = this.scale(scale)
 
 @Composable
 fun ForgotPasswordScreen(

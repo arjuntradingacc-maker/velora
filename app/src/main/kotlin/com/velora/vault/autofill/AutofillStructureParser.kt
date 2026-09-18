@@ -56,7 +56,7 @@ object AutofillStructureParser {
         return ParsedAutofillFields(usernameId, passwordId, webDomain)
     }
 
-    private inline fun visit(node: AssistStructure.ViewNode, action: (AssistStructure.ViewNode) -> Unit) {
+    private fun visit(node: AssistStructure.ViewNode, action: (AssistStructure.ViewNode) -> Unit) {
         action(node)
         for (i in 0 until node.childCount) {
             visit(node.getChildAt(i), action)

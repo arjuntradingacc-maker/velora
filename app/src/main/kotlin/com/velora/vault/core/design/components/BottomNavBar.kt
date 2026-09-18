@@ -2,6 +2,7 @@ package com.velora.vault.core.design.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -97,7 +98,6 @@ private fun NavTabItem(
     val interaction = remember { MutableInteractionSource() }
     val indicatorWidth by animateDpAsState(
         targetValue = if (selected) 20.dp else 0.dp,
-        animationSpec = VeloraMotion.standardSpring,
         label = "nav-indicator",
     )
     Column(
