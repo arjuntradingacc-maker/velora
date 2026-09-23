@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.velora.vault"
+    namespace = "com.downlifeblues.velora"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.velora.vault"
+        applicationId = "com.downlifeblues.velora"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

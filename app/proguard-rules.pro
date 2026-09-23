@@ -17,11 +17,11 @@
 -keepclasseswithmembers class kotlinx.serialization.json.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
--keep,includedescriptorclasses class com.velora.vault.**$$serializer { *; }
--keepclassmembers class com.velora.vault.** {
+-keep,includedescriptorclasses class com.downlifeblues.velora.**$$serializer { *; }
+-keepclassmembers class com.downlifeblues.velora.** {
     *** Companion;
 }
--keepclasseswithmembers class com.velora.vault.** {
+-keepclasseswithmembers class com.downlifeblues.velora.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 

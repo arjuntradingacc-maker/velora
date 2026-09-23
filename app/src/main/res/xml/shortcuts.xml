@@ -7,9 +7,9 @@
         android:shortcutShortLabel="@string/shortcut_add_password_short"
         android:shortcutLongLabel="@string/shortcut_add_password_long">
         <intent
-            android:action="com.velora.vault.action.ADD_PASSWORD"
-            android:targetPackage="com.velora.vault"
-            android:targetClass="com.velora.vault.MainActivity" />
+            android:action="com.downlifeblues.velora.action.ADD_PASSWORD"
+            android:targetPackage="com.downlifeblues.velora"
+            android:targetClass="com.downlifeblues.velora.MainActivity" />
     </shortcut>
 
     <shortcut
@@ -19,9 +19,9 @@
         android:shortcutShortLabel="@string/shortcut_generate_short"
         android:shortcutLongLabel="@string/shortcut_generate_long">
         <intent
-            android:action="com.velora.vault.action.GENERATE_PASSWORD"
-            android:targetPackage="com.velora.vault"
-            android:targetClass="com.velora.vault.MainActivity" />
+            android:action="com.downlifeblues.velora.action.GENERATE_PASSWORD"
+            android:targetPackage="com.downlifeblues.velora"
+            android:targetClass="com.downlifeblues.velora.MainActivity" />
     </shortcut>
 
     <shortcut
@@ -31,9 +31,9 @@
         android:shortcutShortLabel="@string/shortcut_open_vault_short"
         android:shortcutLongLabel="@string/shortcut_open_vault_long">
         <intent
-            android:action="com.velora.vault.action.OPEN_VAULT"
-            android:targetPackage="com.velora.vault"
-            android:targetClass="com.velora.vault.MainActivity" />
+            android:action="com.downlifeblues.velora.action.OPEN_VAULT"
+            android:targetPackage="com.downlifeblues.velora"
+            android:targetClass="com.downlifeblues.velora.MainActivity" />
     </shortcut>
 
     <shortcut
@@ -43,8 +43,8 @@
         android:shortcutShortLabel="@string/shortcut_search_short"
         android:shortcutLongLabel="@string/shortcut_search_long">
         <intent
-            android:action="com.velora.vault.action.SEARCH_VAULT"
-            android:targetPackage="com.velora.vault"
-            android:targetClass="com.velora.vault.MainActivity" />
+            android:action="com.downlifeblues.velora.action.SEARCH_VAULT"
+            android:targetPackage="com.downlifeblues.velora"
+            android:targetClass="com.downlifeblues.velora.MainActivity" />
     </shortcut>
 </shortcuts>
