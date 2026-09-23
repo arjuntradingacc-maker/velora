@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora Privacy Policy</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 5rem;
+    line-height: 1.6;
+    color: #1c1c1e;
+    background: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e8e8ea; background: #121214; }
+    a { color: #7fb2ff; }
+    hr { border-color: #333; }
+  }
+  h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.25rem; }
+  .updated { color: #8a8a8e; font-size: 0.9rem; margin-bottom: 2rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  code { background: rgba(127,127,127,0.15); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.9em; }
+  .callout {
+    border-left: 3px solid #7fb2ff;
+    padding: 0.75rem 1rem;
+    background: rgba(127,178,255,0.08);
+    border-radius: 6px;
+    margin: 1.5rem 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>Velora Privacy Policy</h1>
+<p class="updated">Last updated: September 23, 2026</p>
+
+<p>Velora ("the app") is a password and credential manager for Android. This policy explains what
+data the app handles, what leaves your device, and what never does.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li>Your vault (passwords, passkeys, notes, cards, and other saved items) is encrypted on your
+      device and unlocked only by your master password, PIN, or biometric.</li>
+  <li>We do not run analytics, crash reporting, or advertising SDKs of any kind. We do not sell
+      or share your data with third parties, ever.</li>
+  <li>The only things that ever leave your device are described explicitly below — and even then,
+      never in a form we can read.</li>
+</ul>
+
+<h2>What's stored on your device</h2>
+<p>Every vault item you save — logins, passkeys, secure notes, payment cards, personal info,
+Wi-Fi credentials, one-time codes, documents, API keys, and recovery codes — is stored in an
+encrypted local database. The encryption key is generated on your device and held in the Android
+Keystore (using hardware-backed storage where your device supports it), gated behind your master
+password, PIN, or biometric unlock. We do not have a copy of this key and cannot decrypt your
+vault ourselves.</p>
+<p>The app does not use Android's automatic cloud backup for this data, so your vault is not
+included in device backups.</p>
+
+<h2>What can leave your device, and why</h2>
+
+<h2>1. Optional cross-device sync</h2>
+<p>If you turn sync on, each vault record is encrypted on your device <em>before</em> it is sent,
+along with a randomly generated device identifier used only to tell your devices apart. The sync
+service stores and relays encrypted blobs — it cannot read their contents.</p>
+
+<h2>2. Breach monitoring</h2>
+<p>If you use the Security Center's breach check, the app never sends your password or username
+anywhere. Instead, it hashes each password on your device and sends only the first 5 characters of
+that hash to check it against a public breach-index range (the same privacy-preserving technique
+used by Have I Been Pwned). There is no way to reconstruct your password from what's sent.</p>
+
+<h2>3. Card scanning</h2>
+<p>The "scan card" feature uses your camera and on-device text recognition to read a card number,
+expiry, and name so you don't have to type them. The photo is processed in memory and is never
+saved to your device's gallery, never uploaded, and is discarded immediately after the fields are
+filled in.</p>
+
+<h2>4. Biometric unlock</h2>
+<p>Fingerprint or face unlock is handled entirely by Android's own biometric system. The app never
+receives or stores your raw biometric data — only a yes/no authentication result from the
+operating system.</p>
+
+<h2>What we don't do</h2>
+<ul>
+  <li>No advertising, no ad SDKs, no ad identifiers.</li>
+  <li>No analytics or usage tracking.</li>
+  <li>No selling, renting, or sharing your data with third parties.</li>
+  <li>No access to your vault contents by us — it's encrypted before it ever reaches a network
+      call, and we don't hold the keys.</li>
+</ul>
+
+<h2>Permissions</h2>
+<ul>
+  <li><strong>Camera</strong> — only used when you choose to scan a card or a QR/setup code.</li>
+  <li><strong>Biometric hardware</strong> — only used to unlock your vault.</li>
+  <li><strong>Notifications</strong> — only used for local security alerts (e.g. a breach was found).</li>
+</ul>
+
+<h2>Your controls</h2>
+<ul>
+  <li>You can export or delete any vault item at any time from within the app.</li>
+  <li>Uninstalling the app removes all locally stored vault data from your device.</li>
+  <li>If you've used sync, contact us (below) to request deletion of synced data from the server.</li>
+</ul>
+
+<h2>Changes to this policy</h2>
+<p>If this policy changes, we'll update the date at the top of this page.</p>
+
+<h2>Contact</h2>
+<div class="callout">
+  <p style="margin:0">Questions about this policy or your data:
+  <strong>[YOUR CONTACT EMAIL GOES HERE]</strong></p>
+</div>
+
+</body>
+</html>
